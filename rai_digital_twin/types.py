@@ -49,6 +49,7 @@ class GovernanceEvent():
 class ControllerParams():
     kp: Per_USD
     ki: Per_USD_Seconds
+    kd: Per_USD_Seconds
     leaky_factor: Percentage
     period: Seconds
     enabled: bool
@@ -60,6 +61,7 @@ class ControllerState():
     redemption_rate: Percentage_Per_Hour
     proportional_error: USD_per_RAI
     integral_error: USD_Seconds_per_RAI
+    derivative_error: USD_Seconds_per_RAI
 
 
 @dataclass(frozen=True)

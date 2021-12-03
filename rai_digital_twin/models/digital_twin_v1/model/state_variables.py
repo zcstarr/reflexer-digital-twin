@@ -8,6 +8,7 @@ INITIAL_MARKET_PRICE: USD_per_RAI = 3.22
 
 INITIAL_CONTROLLER_PARAMS = ControllerParams(ki=4e-8,
                                              kp=0.0,
+                                             kd=0.0,
                                              leaky_factor=0.0,
                                              period=4 * 60 * 60,
                                              enabled=True)
@@ -15,6 +16,7 @@ INITIAL_CONTROLLER_PARAMS = ControllerParams(ki=4e-8,
 INITIAL_CONTROLLER_STATE = ControllerState(redemption_price=3.14,
                                            redemption_rate=1.0,
                                            proportional_error=0.0,
+                                           derivative_error = 0.0,
                                            integral_error=0.0)
 
 

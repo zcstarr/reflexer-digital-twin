@@ -60,7 +60,9 @@ def backtest_model(backtesting_data: BacktestingData,
     initial_pid_state = ControllerState(backtesting_data.pid_states[0].redemption_price,
                                         backtesting_data.pid_states[0].redemption_rate,
                                         0.0,
-                                        0.0)
+                                        0.0,
+                                        0.0
+                                        )
 
     initial_state.update(pid_state=initial_pid_state,
                          token_state=backtesting_data.token_states[0])
@@ -68,6 +70,7 @@ def backtest_model(backtesting_data: BacktestingData,
         first_event = governance_events[0].descriptor
         initial_pid_params = ControllerParams(first_event['kp'],
                                               first_event['ki'],
+                                              first_event['kd'],
                                               first_event['leaky_factor'],
                                               first_event['period'],
                                               first_event['enabled'])
@@ -148,6 +151,7 @@ def extrapolate_data(signals: object,
     initial_state = default_model.initial_state
     initial_pid_state = ControllerState(last_historical_row.redemption_price,
                                         last_historical_row.redemption_rate,
+                                        0.0,
                                         0.0,
                                         0.0)
 
@@ -300,14 +304,30 @@ def extrapolation_cycle(base_path: str = None,
             working_path / f'reports/{runtime}-extrapolation.ipynb').expanduser()
         output_html_path = (
             working_path / f'reports/{runtime}-extrapolation.html').expanduser()
+        zinput_nb_path = (
+            working_path / 'rai_digital_twin/templates/zcstarr_template.ipynb').expanduser()
+        zoutput_nb_path = (
+            working_path / f'reports/z{runtime}-extrapolation.ipynb').expanduser()
+        zoutput_html_path = (
+            working_path / f'reports/z{runtime}-extrapolation.html').expanduser()
         pm.execute_notebook(
             input_nb_path,
             output_nb_path,
             parameters=dict(base_path=path)
         )
+        pm.execute_notebook(
+            zinput_nb_path,
+            zoutput_nb_path,
+            parameters=dict(base_path=path)
+        )
         export_cmd = f"jupyter nbconvert --to html '{output_nb_path}'"
         os.system(export_cmd)
         os.system(f"rm '{output_nb_path}'")
+
+        export_cmd = f"jupyter nbconvert --to html '{zoutput_nb_path}'"
+        os.system(export_cmd)
+        os.system(f"rm '{zoutput_nb_path}'")
+
     t2 = time()
     print(f"7. Done! {t2 - t1 :.2f}s\n---")
 

@@ -9,6 +9,7 @@ def row_to_controller_state(row: pd.Series) -> ControllerState:
     return ControllerState(row.RedemptionPrice,
                            row.RedemptionRateHourlyRate,
                            np.nan,
+                           np.nan,
                            np.nan)
 
 
